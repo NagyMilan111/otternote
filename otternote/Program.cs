@@ -1,4 +1,6 @@
-﻿namespace otternote;
+﻿using otternote.Json;
+
+namespace otternote;
 
 
 class Program

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace otternote;
+namespace otternote.Json;
 
 public class JsonHandler
 {

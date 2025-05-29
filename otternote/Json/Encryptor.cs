@@ -2,7 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-namespace otternote;
+namespace otternote.Json;
 
 public class Encryptor
 {

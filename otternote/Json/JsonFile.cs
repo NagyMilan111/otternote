@@ -1,4 +1,4 @@
-﻿namespace otternote;
+﻿namespace otternote.Json;
 
 public class JsonFile
 {
