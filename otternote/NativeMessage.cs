@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 
-namespace encryptionTest;
+namespace otternote;
+
 
 public class NativeMessage
 {

@@ -1,4 +1,4 @@
-﻿namespace encryptionTest;
+﻿namespace otternote;
 
 public class JsonFile
 {

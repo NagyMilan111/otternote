@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography;
 
-namespace encryptionTest;
+namespace otternote;
+
 
 public class PasswordGenerator
 {

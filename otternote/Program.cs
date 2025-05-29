@@ -1,4 +1,5 @@
-﻿namespace encryptionTest;
+﻿namespace otternote;
+
 
 class Program
 {
@@ -14,4 +15,5 @@ class Program
         
         handler.Save(file, "jsonexample.json");
     }
+    
 }

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace encryptionTest;
+namespace otternote;
 
 public class JsonHandler
 {
@@ -15,7 +15,8 @@ public class JsonHandler
                     {
                         { "version", "1" },
                         { "algorithm", "AES-256-CBC" },
-                        { "salt", "" }
+                        { "salt", "" },
+                        { "vault_check", ""}
                     },
                     new List<JsonEntry>()
                 );
