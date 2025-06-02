@@ -22,6 +22,7 @@ public class VaultAuthenticator
         {
             byte[] key = _keyService.DeriveKey(masterPassword, salt);
             string decrypted = _encryptionService.Decrypt(encryptedCheckValue, key);
+            Array.Clear(key, 0, key.Length);
             return decrypted == CheckValue;
         }
         catch
