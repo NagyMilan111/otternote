@@ -13,9 +13,9 @@ public class KeyDerivationService
         _keySize = keySize;
     }
 
-    public byte[] DeriveKey(string password, byte[] salt)
+    public byte[] DeriveKey(byte[] passwordBytes, byte[] salt)
     {
-        using var pbkdf2 = new Rfc2898DeriveBytes(password, salt, _iterations, HashAlgorithmName.SHA256);
+        using var pbkdf2 = new Rfc2898DeriveBytes(passwordBytes, salt, _iterations, HashAlgorithmName.SHA256);
         return pbkdf2.GetBytes(_keySize);
     }
 }

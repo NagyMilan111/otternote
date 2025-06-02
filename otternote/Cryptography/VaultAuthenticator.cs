@@ -16,13 +16,7 @@ public class VaultAuthenticator
         _encryptionService = encryptionService;
     }
 
-    public byte[] CreateEncryptedCheckValue(string masterPassword, byte[] salt)
-    {
-        byte[] key = _keyService.DeriveKey(masterPassword, salt);
-        return _encryptionService.Encrypt(CheckValue, key);
-    }
-
-    public bool ValidateMasterPassword(string masterPassword, byte[] salt, byte[] encryptedCheckValue)
+    public bool ValidateMasterPassword(byte[] masterPassword, byte[] salt, byte[] encryptedCheckValue)
     {
         try
         {

@@ -5,9 +5,9 @@ public class JsonFile
     public Dictionary<string, string> Header {get; set;}
     public List<JsonEntry> Entries {get; set;}
 
-    public JsonFile(Dictionary<string, string> header, List<JsonEntry> entries)
+    public JsonFile(Dictionary<string, string> header, List<JsonEntry>? entries = null)
     {
         this.Header = header;
-        this.Entries = entries;
+        Entries = entries ?? new List<JsonEntry>();   
     }
 }

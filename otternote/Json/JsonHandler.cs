@@ -6,64 +6,45 @@ public class JsonHandler
 {
     public JsonFile Load(string filePath)
     {
+        if (!File.Exists(filePath))
+        {
+            throw new FileNotFoundException("File not found", filePath);
+        }
+
         try
         {
-            if (!File.Exists(filePath))
+            using FileStream fs = File.OpenRead(filePath);
+            using JsonDocument document = JsonDocument.Parse(fs);
+            var root = document.RootElement;
+
+            var header = new Dictionary<string, string>
             {
-                return new JsonFile(
-                    new Dictionary<string, string>
-                    {
-                        { "version", "1" },
-                        { "algorithm", "AES-256-CBC" },
-                        { "salt", "" },
-                        { "vault_check", ""}
-                    },
-                    new List<JsonEntry>()
+                { "version", root.GetProperty("version").ToString() },
+                { "algorithm", root.GetProperty("algorithm").ToString() },
+                { "salt", root.GetProperty("salt").ToString() },
+                { "vault_check", root.GetProperty("vault_check").ToString() }
+            };
+
+            List<JsonEntry> entries = new List<JsonEntry>();
+            foreach (var entryElement in root.GetProperty("entries").EnumerateArray())
+            {
+                var entry = new JsonEntry(
+                    site: entryElement.GetProperty("site").GetString(),
+                    password: ParseCipherEntry(entryElement.GetProperty("password")),
+                    username: ParseCipherEntry(entryElement.GetProperty("username"))
                 );
+                entries.Add(entry);
             }
 
-            using (FileStream fs = File.OpenRead(filePath))
-            {
-                using (JsonDocument document = JsonDocument.Parse(fs))
-                {
-                    var root = document.RootElement;
-
-                    // Parse header
-                    var header = new Dictionary<string, string>
-                    {
-                        { "version", root.GetProperty("version").ToString() },
-                        { "algorithm", root.GetProperty("algorithm").ToString() },
-                        { "salt", root.GetProperty("salt").ToString() },
-                        { "vault_check", root.GetProperty("vault_check").ToString() }
-                    };
-
-                    // Parse entries
-                    List<JsonEntry> entries = new List<JsonEntry>();
-                    foreach (var entryElement in root.GetProperty("entries").EnumerateArray())
-                    {
-                        var entry = new JsonEntry(
-                            site: entryElement.GetProperty("site").GetString(),
-                            password: ParseCipherEntry(entryElement.GetProperty("password")),
-                            username: ParseCipherEntry(entryElement.GetProperty("username"))
-                        );
-                        entries.Add(entry);
-                    }
-
-                    return new JsonFile(header, entries);
-                }
-            }
+            return new JsonFile(header, entries);
         }
         catch (JsonException ex)
         {
             throw new InvalidOperationException(
                 $"Invalid JSON format in file {filePath}. Error: {ex.Message}", ex);
         }
-        catch (Exception ex)
-        {
-            throw new InvalidOperationException(
-                $"Failed to load file {filePath}. Error: {ex.Message}", ex);
-        }
     }
+
    
 
     private CipherEntry ParseCipherEntry(JsonElement element)
@@ -82,31 +63,34 @@ public class JsonHandler
             using (var writer = new Utf8JsonWriter(fs, new JsonWriterOptions { Indented = true }))
             {
                 writer.WriteStartObject();
-                
+
                 // Write header
                 foreach (var kvp in jsonFile.Header)
                 {
                     writer.WriteString(kvp.Key, kvp.Value);
                 }
-                
-                // Write entries
+
+                // Always write "entries" array, even if empty or null
                 writer.WriteStartArray("entries");
-                foreach (var entry in jsonFile.Entries)
+
+                if (jsonFile.Entries != null)
                 {
-                    writer.WriteStartObject();
-                    writer.WriteString("site", entry.Site);
-                    
-                    WriteCipherEntry(writer, "password", entry.Password);
-                    WriteCipherEntry(writer, "username", entry.Username);
-                    
-                    writer.WriteEndObject();
+                    foreach (var entry in jsonFile.Entries)
+                    {
+                        writer.WriteStartObject();
+                        writer.WriteString("site", entry.Site);
+                        WriteCipherEntry(writer, "password", entry.Password);
+                        WriteCipherEntry(writer, "username", entry.Username);
+                        writer.WriteEndObject();
+                    }
                 }
+
                 writer.WriteEndArray();
-                
                 writer.WriteEndObject();
             }
         }
     }
+
 
     private void WriteCipherEntry(Utf8JsonWriter writer, string propertyName, CipherEntry entry)
     {

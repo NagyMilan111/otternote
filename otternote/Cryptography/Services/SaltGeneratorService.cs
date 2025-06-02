@@ -2,7 +2,7 @@
 
 using System.Security.Cryptography;
 
-public class RandomGenerator
+public class SaltGeneratorService
 {
     public byte[] GenerateBytes(int length)
     {
