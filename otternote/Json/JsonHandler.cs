@@ -22,7 +22,8 @@ public class JsonHandler
                 { "version", root.GetProperty("version").ToString() },
                 { "algorithm", root.GetProperty("algorithm").ToString() },
                 { "salt", root.GetProperty("salt").ToString() },
-                { "vault_check", root.GetProperty("vault_check").ToString() }
+                { "vault_check", root.GetProperty("vault_check").ToString() },
+                { "vault_check_iv", root.GetProperty("vault_check_iv").ToString() },
             };
 
             List<JsonEntry> entries = new List<JsonEntry>();

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Security.Cryptography;
+using System.Text;
 using otternote.Json;
 using otternote.Services;
 
@@ -26,6 +27,9 @@ public class NewFileInitializer
         fileHeader.Add("algorithm", "AES-256-CBC");
         fileHeader.Add("salt", Convert.ToBase64String(salt));
         fileHeader.Add("vault_check", Convert.ToBase64String(encryptedVaultCheck));
+        Aes aes = Aes.Create();
+        aes.GenerateIV();
+        fileHeader.Add("vault_check_iv", Convert.ToBase64String(aes.IV));
 
         
         JsonFile file = new JsonFile(fileHeader);

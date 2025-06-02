@@ -26,13 +26,12 @@ public class EncryptionService
     }
 
 
-    public string Decrypt(byte[] encryptedData, byte[] key)
+    public byte[] Decrypt(byte[] encryptedData, byte[] key, byte[] iv)
     {
         using Aes aes = Aes.Create();
         aes.Key = key;
         Array.Clear(key, 0, key.Length);
-
-        byte[] iv = new byte[aes.BlockSize / 8];
+        
         byte[] cipherText = new byte[encryptedData.Length - iv.Length];
 
         Buffer.BlockCopy(encryptedData, 0, iv, 0, iv.Length);
@@ -44,6 +43,6 @@ public class EncryptionService
         byte[] plainBytes = decryptor.TransformFinalBlock(cipherText, 0, cipherText.Length);
 
         
-        return Encoding.UTF8.GetString(plainBytes);
+        return plainBytes;
     }
 }

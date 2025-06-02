@@ -1,4 +1,5 @@
-﻿using otternote.Services;
+﻿using System.Text;
+using otternote.Services;
 
 namespace otternote.Cryptography;
 
@@ -16,12 +17,13 @@ public class VaultAuthenticator
         _encryptionService = encryptionService;
     }
 
-    public bool ValidateMasterPassword(byte[] masterPassword, byte[] salt, byte[] encryptedCheckValue)
+    public bool ValidateMasterPassword(byte[] masterPassword, byte[] salt, byte[] encryptedCheckValue, byte[] iv)
     {
         try
         {
             byte[] key = _keyService.DeriveKey(masterPassword, salt);
-            string decrypted = _encryptionService.Decrypt(encryptedCheckValue, key);
+            byte[] decryptedBytes = _encryptionService.Decrypt(encryptedCheckValue, key, iv);
+            string decrypted = Encoding.UTF8.GetString(decryptedBytes);           
             Array.Clear(key, 0, key.Length);
             return decrypted == CheckValue;
         }

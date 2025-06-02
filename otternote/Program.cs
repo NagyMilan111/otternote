@@ -41,8 +41,9 @@ class Program
 
         byte[] salt = Convert.FromBase64String(file.Header["salt"]);
         byte[] encryptedVaultCheck = Convert.FromBase64String(file.Header["vault_check"]);
+        byte[] vaultCheckIv = Convert.FromBase64String(file.Header["vault_check_iv"]);
 
-        if (vaultAuthenticator.ValidateMasterPassword(masterPasswordBytes, salt, encryptedVaultCheck))
+        if (vaultAuthenticator.ValidateMasterPassword(masterPasswordBytes, salt, encryptedVaultCheck, vaultCheckIv))
         {
             Console.WriteLine("Master password verified. Press Ctrl+C to exit.");
             
@@ -58,7 +59,7 @@ class Program
             
             while (_keepRunning)
             {
-                nativeMessageHandler.HandleMessages(file);
+                //nativeMessageHandler.HandleMessages(file);
             }
             
             Thread.Sleep(5000);
