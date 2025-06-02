@@ -8,6 +8,8 @@ namespace otternote;
 
 class Program
 {
+    static volatile bool _keepRunning = true;
+    
     static void Main(string[] args)
     {
 
@@ -42,7 +44,26 @@ class Program
 
         if (vaultAuthenticator.ValidateMasterPassword(masterPasswordBytes, salt, encryptedVaultCheck))
         {
-            Console.WriteLine("Master password verified.");
+            Console.WriteLine("Master password verified. Press Ctrl+C to exit.");
+            
+            // Subscribe to Ctrl+C (SIGINT)
+            Console.CancelKeyPress += (sender, e) =>
+            {
+                Console.WriteLine("\nCtrl+C detected. Exiting...");
+                e.Cancel = true; // Prevent immediate process termination
+                _keepRunning = false; // Set flag to exit loop
+            };
+            
+            NativeMessageHandler nativeMessageHandler = new NativeMessageHandler();
+            
+            while (_keepRunning)
+            {
+                nativeMessageHandler.HandleMessages(file);
+            }
+            
+            Thread.Sleep(5000);
+            Environment.Exit(0);
+            
         }
         else
         {
