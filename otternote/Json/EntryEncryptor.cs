@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 namespace otternote.Json;
 
-public class Encryptor
+public class EntryEncryptor
 {
     public JsonEntry EncryptEntry(JsonEntry plainEntry, byte[] key)
     {
