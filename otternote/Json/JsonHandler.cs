@@ -102,7 +102,7 @@ public class JsonHandler
     }
     
 
-    public JsonFile Delete(string siteName, JsonFile jsonFile)
+    public void Delete(string siteName, JsonFile jsonFile)
     {
         if (siteName == null || jsonFile == null)
         {
@@ -114,31 +114,7 @@ public class JsonHandler
             if (fileEntry.Site == siteName)
             {
                 jsonFile.Entries.Remove(fileEntry);
-                return jsonFile;
             }
         }
-        
-        return jsonFile;
-    }
-
-    public JsonFile AddOrUpdate(JsonEntry newEntry, JsonFile jsonFile)
-    {
-        if (newEntry == null || jsonFile == null)
-        {
-            throw new ArgumentNullException(nameof(newEntry));
-        }    
-        
-        for (int i = 0; i < jsonFile.Entries.Count; i++)
-        {
-            if (jsonFile.Entries[i].Site == newEntry.Site)
-            {
-                jsonFile.Entries[i] = newEntry;
-                return jsonFile;
-            }
-        }
-        
-        jsonFile.Entries.Add(newEntry);
-        
-        return jsonFile;
     }
 }

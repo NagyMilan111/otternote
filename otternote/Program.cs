@@ -56,12 +56,13 @@ class Program
             };
             
             NativeMessageHandler nativeMessageHandler = new NativeMessageHandler();
-            
+
             while (_keepRunning)
             {
-                //nativeMessageHandler.HandleMessages(file);
+                    nativeMessageHandler.HandleMessages(file, _keepRunning);
             }
-            
+
+            handler.Save(file, "vault.json");
             Thread.Sleep(5000);
             Environment.Exit(0);
             

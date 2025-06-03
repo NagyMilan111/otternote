@@ -3,7 +3,7 @@
 namespace otternote.Cryptography;
 
 
-public class PasswordGenerator
+public class PasswordGeneratorService
 {
     // Define character sets
     private const string LowerCaseChars = "abcdefghijklmnopqrstuvwxyz";
@@ -11,7 +11,7 @@ public class PasswordGenerator
     private const string NumericChars = "0123456789";
     private const string SpecialChars = "!@#$%^&*()-_=+";
 
-    public static string GeneratePassword()
+    public string GeneratePassword()
     {
         int length = 16;
 
@@ -40,12 +40,12 @@ public class PasswordGenerator
         }
     }
 
-    private static char GetRandomChar(RandomNumberGenerator rng, string charSet)
+    private char GetRandomChar(RandomNumberGenerator rng, string charSet)
     {
         return charSet[GetRandomInt(rng, 0, charSet.Length)];
     }
 
-    private static int GetRandomInt(RandomNumberGenerator rng, int minValue = 0, int maxValue = int.MaxValue)
+    private int GetRandomInt(RandomNumberGenerator rng, int minValue = 0, int maxValue = int.MaxValue)
     {
         // Generate a random integer between minValue (inclusive) and maxValue (exclusive)
         uint scale = uint.MaxValue;

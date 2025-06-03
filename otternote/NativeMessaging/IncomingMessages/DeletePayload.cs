@@ -2,6 +2,6 @@
 
 public class DeletePayload
 {
-    private string Url { get; set; } = "";
-    private string MasterPassword { get; set; } = "";
+    public string Url { get; set; } = "";
+    public string MasterPassword { get; set; } = "";
 }

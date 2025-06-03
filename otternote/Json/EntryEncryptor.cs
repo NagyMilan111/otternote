@@ -6,19 +6,20 @@ namespace otternote.Json;
 
 public class EntryEncryptor
 {
-    public JsonEntry EncryptEntry(JsonEntry plainEntry, byte[] key)
+    public JsonEntry EncryptEntry(string base64Username, string base64Password, string site, byte[] key)
     {
         if (key.Length != 32) throw new ArgumentException("Key must be 32 bytes (256 bits)");
 
-        // Encrypt username
-        CipherEntry encryptedUsername = EncryptString(plainEntry.Username.CipherText, key);
+        string decodedUsername = Encoding.UTF8.GetString(Convert.FromBase64String(base64Username));
+        string decodedPassword = Encoding.UTF8.GetString(Convert.FromBase64String(base64Password));
         
-        // Encrypt password
-        CipherEntry encryptedPassword = EncryptString(plainEntry.Password.CipherText, key);
+        CipherEntry encryptedUsername = EncryptString(decodedUsername, key);
+        CipherEntry encryptedPassword = EncryptString(decodedPassword, key);
+
 
         // Return new JsonEntry with encrypted data
         return new JsonEntry(
-            plainEntry.Site,
+            site,
             new CipherEntry(encryptedPassword.Iv, encryptedPassword.CipherText),
             new CipherEntry(encryptedUsername.Iv, encryptedUsername.CipherText)
         );

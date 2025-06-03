@@ -5,8 +5,8 @@ namespace otternote;
 
 public class PostPayload
 {
-    private string Url { get; set; } = "";
-    private byte[] MasterPassword { get; set; } = [];
-    private string Password { get; set; } = "";
-    private string Username { get; set; } = "";
+    public string Url { get; set; } = "";
+    public string MasterPassword { get; set; } = "";
+    public string Password { get; set; } = "";
+    public string Username { get; set; } = "";
 }
